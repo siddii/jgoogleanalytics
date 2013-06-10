@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="JGoogleAnalytics" default="compile" basedir=".">
+
+  <dirname property="module.basedir" file="${ant.file}"/>
+
+  <property name="version" value="0.4"/>
+
+  <property name="production.output.dir" value="${module.basedir}/target/classes"/>
+  <property name="test.output.dir" value="${module.basedir}/target/test-classes"/>
+  <property name="output.file" value="${module.basedir}/dist/JGoogleAnalytics_${version}.jar"/>
+
+
+  <path id="module.sourcepath">
+    <dirset dir="${module.basedir}/src/main">
+      <include name="java"/>
+    </dirset>
+  </path>
+
+  <path id="module.test.sourcepath">
+    <dirset dir="${module.basedir}/src/main">
+      <include name="java"/>
+    </dirset>
+  </path>
+
+
+  <patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.sbas/**"/>
+    <exclude name="**/.IJI.*/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+
+  <patternset id="compiler.resources">
+    <include name="**/?*.java"/>
+    <include name="**/?*.properties"/>
+    <include name="**/?*.xml"/>
+    <include name="**/?*.gif"/>
+    <include name="**/?*.png"/>
+    <include name="**/?*.jpeg"/>
+    <include name="**/?*.jpg"/>
+    <include name="**/?*.html"/>
+    <include name="**/?*.dtd"/>
+    <include name="**/?*.tld"/>
+    <include name="**/?*.template"/>
+  </patternset>
+
+  <patternset id="excluded.from.compilation">
+    <patternset refid="ignored.files"/>
+  </patternset>
+
+
+  <target name="compile" description="compile production classes" depends="clean">
+    <mkdir dir="${production.output.dir}"/>
+    <javac destdir="${production.output.dir}" source="1.4" target="1.4" debug="on" nowarn="off" fork="true">
+      <src refid="module.sourcepath"/>
+      <patternset refid="excluded.from.compilation"/>
+    </javac>
+
+  </target>
+
+  <target name="copy.resources" description="Copy resources to the output folder">
+    <copy todir="${production.output.dir}">
+      <fileset dir="${module.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="compile.tests" depends="compile" description="compile test classes"
+          unless="skip.tests">
+    <mkdir dir="${test.output.dir}"/>
+    <javac destdir="${test.output.dir}" debug="on" nowarn="off" fork="true">
+      <classpath location="${production.output.dir}"/>
+      <src refid="module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation"/>
+    </javac>
+
+    <copy todir="${test.output.dir}">
+      <fileset dir="${module.basedir}/test-src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="delete.output.dirs" description="cleanup output dirs">
+    <delete dir="${production.output.dir}"/>
+    <delete dir="${test.output.dir}"/>
+  </target>
+
+
+  <target name="clean" depends="delete.output.dirs" description="cleanup all"/>
+
+  <target name="buildJar" depends="compile">
+    <mkdir dir="${module.basedir}/dist"/>
+    <echo>Creating ${output.file} ...</echo>
+    <jar basedir="${production.output.dir}" file="${output.file}">
+      <include name="**/**"/>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Implementation-Vendor" value="BoxySystems Inc."/>
+        <attribute name="Implementation-URL" value="http://www.BoxySystems.com"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+      </manifest>
+    </jar>
+  </target>
+</project>

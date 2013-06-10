@@ -1,0 +1,1 @@
+mvn source:jar javadoc:jar repository:bundle-create deploy -Dgpg.passphrase=passphrase

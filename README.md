@@ -18,7 +18,11 @@ If you have a registered [Google analytics](http://www.google.com/analytics) acc
   * Google analytics does not update their reports in real time because of their high volume of subscribers. It usually gets updated nightly or every 24 hrs. If you are really curious to know if the tracking went fine, you can attach a *LoggingAdapter* to *JGoogleAnalyticsTracker* and see if you are seeing the success message.
   * JGoogleAnalytics would gracefully ignore errors and not collect statistics for the application running offline (without network connectivity)
 
+## Similar Projects
+
+* [google-analytics-java](https://github.com/brsanthu/google-analytics-java)
+* [JGoogleAnalyticsTracker](https://code.google.com/p/jgoogleanalyticstracker/)
+* https://developers.google.com/api-client-library/java/apis/analytics/v3
+
 ###Where is all the old code?
 If you are looking for legacy code of this project, please head to the project's [Google code](https://code.google.com/p/jgoogleanalytics/) repository
-
-  
